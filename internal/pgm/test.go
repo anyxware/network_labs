@@ -1,4 +1,0 @@
-package pgm
-
-func test() {
-}
