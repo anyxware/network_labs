@@ -1,11 +1,11 @@
-package server
+package udp
 
 import "net"
 
-func NewMCListener(srvAddr *net.UDPAddr) (*Server, error) {
+func newMCServer(srvAddr *net.UDPAddr) (*server, error) {
 	c, err := net.ListenMulticastUDP("udp4", nil, srvAddr)
 	if err != nil {
 		return nil, err
 	}
-	return &Server{conn: c}, nil
+	return &server{conn: c}, nil
 }
