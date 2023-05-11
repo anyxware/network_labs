@@ -47,7 +47,7 @@ func newServer(srvAddr *net.UDPAddr) (*server, error) {
 	return &server{conn: c}, nil
 }
 
-func (s *server) Serve() {
+func (s *server) Serve() error {
 	for {
 		senderAddr := s.read()
 		if !s.shouldRespond() {

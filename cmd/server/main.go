@@ -7,16 +7,26 @@ import (
 )
 
 type Server interface {
-	Serve()
+	Serve() error
 	Destroy()
 }
 
 func main() {
+	proto := "pgm"
+
 	var srv Server
-	srv, err := udp.NewServer()
+	var err error
+	switch proto {
+	case "udp":
+		srv, err = udp.NewServer()
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer srv.Destroy()
-	srv.Serve()
+
+	err = srv.Serve()
+	if err != nil {
+		log.Fatal(err)
+	}
 }
