@@ -6,26 +6,26 @@ import (
 	"network/internal/udp"
 )
 
-type Server interface {
-	Serve() error
+type Listener interface {
+	Listen() error
 	Destroy()
 }
 
 func main() {
 	proto := "pgm"
 
-	var srv Server
+	var listener Listener
 	var err error
 	switch proto {
 	case "udp":
-		srv, err = udp.NewServer()
+		listener, err = udp.NewListener()
 	}
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer srv.Destroy()
+	defer listener.Destroy()
 
-	err = srv.Serve()
+	err = listener.Listen()
 	if err != nil {
 		log.Fatal(err)
 	}

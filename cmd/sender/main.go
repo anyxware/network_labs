@@ -7,23 +7,23 @@ import (
 	"network/internal/udp"
 )
 
-type Client interface {
+type Sender interface {
 	Send(msg []byte)
 	Destroy()
 }
 
 func main() {
-	var c Client
-	c, err := udp.NewClient()
+	var sender Sender
+	sender, err := udp.NewSender()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer c.Destroy()
+	defer sender.Destroy()
 
 	for {
 		var msg string
 		fmt.Print("Enter message: ")
 		fmt.Scan(&msg)
-		c.Send([]byte(msg))
+		sender.Send([]byte(msg))
 	}
 }
