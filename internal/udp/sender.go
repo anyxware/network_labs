@@ -9,11 +9,11 @@ import (
 	sockfd "network/internal/udp/sock-fd"
 )
 
-type client struct {
+type sender struct {
 	conn *net.UDPConn
 }
 
-func NewClient() (*client, error) {
+func NewSender() (*sender, error) {
 	var srvAddr string
 	fmt.Print("Enter receiver address: ")
 	fmt.Scan(&srvAddr)
@@ -23,49 +23,49 @@ func NewClient() (*client, error) {
 		log.Fatal(err)
 	}
 	
-	c, err := newClient(nil, addr)
+	c, err := newSender(nil, addr)
 	if err != nil {
 		return nil, err
 	}
 	return c, nil
 }
 
-func newClient(localAddr, remoteAddr *net.UDPAddr) (*client, error) {
+func newSender(localAddr, remoteAddr *net.UDPAddr) (*sender, error) {
 	c, err := net.DialUDP("udp4", localAddr, remoteAddr)
 	if err != nil {
 		return nil, err
 	}
-	return &client{conn: c}, nil
+	return &sender{conn: c}, nil
 }
 
-func (c *client) Send(msg []byte) {
+func (s *sender) Send(msg []byte) {
 	var ttl int
 	fmt.Print("Enter ttl: ")
 	fmt.Scan(&ttl)
 
-	err := c.setTTL(ttl)
+	err := s.setTTL(ttl)
 	if err != nil {
 		log.Printf("failed set ttl for multicast: %s", err)
 		return
 	}
 
-	c.write(msg)
-	if !c.shouldWaitResponse() {
+	s.write(msg)
+	if !s.shouldWaitResponse() {
 		return
 	}
-	c.read()
+	s.read()
 }
 
-func (c *client) write(data []byte) {
-	_, err := c.conn.Write(data)
+func (s *sender) write(data []byte) {
+	_, err := s.conn.Write(data)
 	if err != nil {
 		log.Print(err)
 	}
 }
 
-func (c *client) read() {
+func (s *sender) read() {
 	buffer := make([]byte, 1024)
-	n, err := c.conn.Read(buffer)
+	n, err := s.conn.Read(buffer)
 	if err != nil {
 		log.Print(err)
 	} else {
@@ -73,19 +73,19 @@ func (c *client) read() {
 	}
 }
 
-func (c *client) setTTL(ttl int) error {
-	fd, err := sockfd.GetFd(c.conn)
+func (s *sender) setTTL(ttl int) error {
+	fd, err := sockfd.GetFd(s.conn)
 	if err != nil {
 		return err
 	}
 	return syscall.SetsockoptInt(fd, syscall.IPPROTO_IP, syscall.IP_MULTICAST_TTL, ttl)
 }
 
-func (c *client) shouldWaitResponse() bool {
-	cType := connType(c.conn.RemoteAddr().String())
+func (s *sender) shouldWaitResponse() bool {
+	cType := connType(s.conn.RemoteAddr().String())
 	return cType == unicast
 }
 
-func (c *client) Destroy() {
-	c.conn.Close()
+func (s *sender) Destroy() {
+	s.conn.Close()
 }
