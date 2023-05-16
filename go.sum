@@ -1,3 +1,5 @@
+github.com/ishidawataru/sctp v0.0.0-20230406120618-7ff4192f6ff2 h1:i2fYnDurfLlJH8AyyMOnkLHnHeP8Ff/DDpuZA/D3bPo=
+github.com/ishidawataru/sctp v0.0.0-20230406120618-7ff4192f6ff2/go.mod h1:co9pwDoBCm1kGxawmb4sPq0cSIOOWNPT4KnHotMP1Zg=
 github.com/pebbe/zmq4 v1.2.9 h1:JlHcdgq6zpppNR1tH0wXJq0XK03pRUc4lBlHTD7aj/4=
 github.com/pebbe/zmq4 v1.2.9/go.mod h1:nqnPueOapVhE2wItZ0uOErngczsJdLOGkebMxaO8r48=
 golang.org/x/sys v0.8.0 h1:EBmGv8NaZBZTWvrbjNoL6HVt+IVy3QDQpJs7VRIw3tU=
